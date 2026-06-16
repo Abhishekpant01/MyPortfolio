@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Button from "../button/Button";
-import Scroller from "../Skills/skill"; 
+import Scroller from "../skills/skill"; 
 import "./HeroSection.css";
 
 const HeroSection = () => {
