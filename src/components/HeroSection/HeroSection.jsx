@@ -1,26 +1,20 @@
 // HeroSection.jsx
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import Button from "../Button/button";
 import Scroller from "../skills/skill"; 
 import "./HeroSection.css";
 
 const HeroSection = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false); // Start with false
-  const [isMounted, setIsMounted] = useState(false); // Add mounted state
-  
-  const [displayName, setDisplayName] = useState("");
-  const [nameIndex, setNameIndex] = useState(0);
-  const [showRole, setShowRole] = useState(false);
-  const [typedText, setTypedText] = useState("");
-  const [textIndex, setTextIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [stage, setStage] = useState(1);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   
   const fullName = "ABHISHEK  PANT";
   const mainLine = "Code with logic. Build with creativity. Building web experiences that are ";
   const changingWords = ["fast", "responsive", "scalable", "user-focused"];
   const [wordIndex, setWordIndex] = useState(0);
+  const [currentWord, setCurrentWord] = useState("");
+  const [textIndex, setTextIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
   
   // Fix: Check theme only after component mounts
   useEffect(() => {
@@ -59,71 +53,34 @@ const HeroSection = () => {
     };
   }, []);
   
-  // Name animation
+  // Typewriter effect - only on the last word
   useEffect(() => {
-    if (!isMounted) return; // Wait for mount
-    
-    if (nameIndex < fullName.length) {
-      const timer = setTimeout(() => {
-        setDisplayName(fullName.slice(0, nameIndex + 1));
-        setNameIndex(nameIndex + 1);
-      }, 100);
-      return () => clearTimeout(timer);
-    } else if (!showRole) {
-      setTimeout(() => setShowRole(true), 300);
-    }
-  }, [nameIndex, showRole, fullName.length, isMounted]);
-  
-  // Typewriter effect
-  useEffect(() => {
-    if (!showRole || !isMounted) return;
+    if (!isMounted) return;
     
     let timer;
+    const word = changingWords[wordIndex];
     
-    if (stage === 1) {
-      if (textIndex < mainLine.length) {
-        timer = setTimeout(() => {
-          setTypedText(mainLine.slice(0, textIndex + 1));
-          setTextIndex(textIndex + 1);
-        }, 60);
-        return () => clearTimeout(timer);
-      } else if (textIndex === mainLine.length) {
-        timer = setTimeout(() => {
-          setStage(2);
-          setTextIndex(0);
-        }, 500);
-        return () => clearTimeout(timer);
-      }
-    }
-    
-    if (stage === 2) {
-      const currentWord = changingWords[wordIndex];
-      
-      if (!isDeleting && textIndex < currentWord.length) {
-        timer = setTimeout(() => {
-          setTypedText(mainLine + currentWord.slice(0, textIndex + 1));
-          setTextIndex(textIndex + 1);
-        }, 100);
-        return () => clearTimeout(timer);
-      } else if (!isDeleting && textIndex === currentWord.length) {
-        timer = setTimeout(() => {
-          setIsDeleting(true);
-        }, 1500);
-        return () => clearTimeout(timer);
-      } else if (isDeleting && textIndex > 0) {
-        timer = setTimeout(() => {
-          setTypedText(mainLine + currentWord.slice(0, textIndex - 1));
-          setTextIndex(textIndex - 1);
-        }, 50);
-        return () => clearTimeout(timer);
-      } else if (isDeleting && textIndex === 0) {
-        setIsDeleting(false);
-        setWordIndex((prev) => (prev + 1) % changingWords.length);
-      }
+    if (!isDeleting && textIndex < word.length) {
+      timer = setTimeout(() => {
+        setCurrentWord(word.slice(0, textIndex + 1));
+        setTextIndex(textIndex + 1);
+      }, 100);
+    } else if (!isDeleting && textIndex === word.length) {
+      timer = setTimeout(() => {
+        setIsDeleting(true);
+      }, 1500);
+    } else if (isDeleting && textIndex > 0) {
+      timer = setTimeout(() => {
+        setCurrentWord(word.slice(0, textIndex - 1));
+        setTextIndex(textIndex - 1);
+      }, 50);
+    } else if (isDeleting && textIndex === 0) {
+      setIsDeleting(false);
+      setWordIndex((prev) => (prev + 1) % changingWords.length);
     }
     
     return () => clearTimeout(timer);
-  }, [showRole, stage, textIndex, isDeleting, wordIndex, mainLine, changingWords, isMounted]);
+  }, [isMounted, textIndex, isDeleting, wordIndex, changingWords]);
 
   const handleViewProjects = () => {
     document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
@@ -151,82 +108,43 @@ const HeroSection = () => {
           {/* Left Side - Content */}
           <div className="hero-left">
             <div className="hero-content">
-              {/* Name */}
+              {/* Name - Static */}
               <div className="hero-name-wrapper">
                 <h1 className="hero-name">
-                  {displayName.split("").map((char, idx) => (
-                    <motion.span
-                      key={idx}
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.05, duration: 0.4 }}
-                      className={char === " " ? "space-char" : ""}
-                    >
-                      {char === " " ? "\u00A0" : char}
-                    </motion.span>
-                  ))}
+                  {fullName}
                 </h1>
               </div>
               
-              {/* Full Stack Developer */}
-              {showRole && (
-                <motion.div
-                  className="hero-role"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, type: "spring" }}
-                >
-                  <span className="role-line">FULL STACK</span>
-                  <span className="role-line role-highlight">DEVELOPER</span>
-                </motion.div>
-              )}
+              {/* Full Stack Developer - Static */}
+              <div className="hero-role">
+                <span className="role-line">FULL STACK</span>
+                <span className="role-line role-highlight">DEVELOPER</span>
+              </div>
               
-              {/* Typewriter Text */}
-              {showRole && (
-                <motion.div
-                  className="hero-dynamic-text"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  <p className="dynamic-text">
-                    {typedText}
-                    {stage === 2 && (
-                      <span className="changing-word-cursor">|</span>
-                    )}
-                    {stage === 1 && textIndex < mainLine.length && (
-                      <span className="cursor">|</span>
-                    )}
-                  </p>
-                </motion.div>
-              )}
+              {/* Typewriter Text - Only last word changes */}
+              <div className="hero-dynamic-text">
+                <p className="dynamic-text">
+                  {mainLine}
+                  <span className="changing-word">
+                    {currentWord}
+                  </span>
+                  <span className="cursor">|</span>
+                </p>
+              </div>
               
-              {/* Buttons */}
-              {showRole && (
-                <motion.div
-                  className="hero-buttons"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8, duration: 0.5 }}
-                >
-                  <Button type="primary" onClick={handleViewProjects}>
-                    View Projects
-                  </Button>
-                  <Button type="secondary" onClick={handleDownloadCV}>
-                    Download CV
-                  </Button>
-                </motion.div>
-              )}
+              {/* Buttons - Static */}
+              <div className="hero-buttons">
+                <Button type="primary" onClick={handleViewProjects}>
+                  View Projects
+                </Button>
+                <Button type="secondary" onClick={handleDownloadCV}>
+                  Download CV
+                </Button>
+              </div>
               
-              {/* Social Links */}
-              {showRole && (
-                <motion.div
-                  className="hero-social"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1.2, duration: 0.5 }}
-                >
-                 <div className="social-links">
+              {/* Social Links - Static */}
+              <div className="hero-social">
+                <div className="social-links">
                   {/* GitHub */}
                   <a
                     href="https://github.com/Abhishekpant01"
@@ -274,37 +192,29 @@ const HeroSection = () => {
                     </svg>
                   </a>
                 </div>
-                </motion.div>
-              )}
+              </div>
             </div>
           </div>
           
-          {/* Right Side - Animation */}
-          {showRole && (
-            <motion.div 
-              className="hero-right"
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-            >
-              <div className="animation-container">
-                <div className="floating-cube">
-                  <div className="cube-front">{'</>'}</div>
-                  <div className="cube-back">{'{}'}</div>
-                  <div className="cube-left">{'()'}</div>
-                  <div className="cube-right">{'[]'}</div>
-                </div>
-                <div className="code-particles">
-                  <span className="particle">{'const'}</span>
-                  <span className="particle">{'let'}</span>
-                  <span className="particle">{'=>'}</span>
-                  <span className="particle">{'{}'}</span>
-                  <span className="particle">{'()'}</span>
-                  <span className="particle">{'[]'}</span>
-                </div>
+          {/* Right Side - Static */}
+          <div className="hero-right">
+            <div className="animation-container">
+              <div className="floating-cube">
+                <div className="cube-front">{'</>'}</div>
+                <div className="cube-back">{'{}'}</div>
+                <div className="cube-left">{'()'}</div>
+                <div className="cube-right">{'[]'}</div>
               </div>
-            </motion.div>
-          )}
+              <div className="code-particles">
+                <span className="particle">{'const'}</span>
+                <span className="particle">{'let'}</span>
+                <span className="particle">{'=>'}</span>
+                <span className="particle">{'{}'}</span>
+                <span className="particle">{'()'}</span>
+                <span className="particle">{'[]'}</span>
+              </div>
+            </div>
+          </div>
         </div>
         
         <div className="hero-glow"></div>
