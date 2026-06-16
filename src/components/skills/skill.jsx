@@ -16,12 +16,18 @@ const skills = [
 ];
 
 const Skill = () => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const savedTheme = localStorage.getItem("theme");
-    return savedTheme === "dark";
-  });
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+    
+    // Check initial theme
+    const savedTheme = localStorage.getItem("theme");
+    const isDark = savedTheme === "dark" || document.body.classList.contains("dark-mode");
+    setIsDarkMode(isDark);
+
+    // Listen for theme changes
     const checkTheme = () => {
       const savedTheme = localStorage.getItem("theme");
       setIsDarkMode(savedTheme === "dark");
@@ -41,6 +47,11 @@ const Skill = () => {
       observer.disconnect();
     };
   }, []);
+
+  // Don't render until mounted
+  if (!isMounted) {
+    return <div className="skill-marquee-loading" style={{ padding: '20px 0' }}></div>;
+  }
 
   return (
     <div className={`skill-marquee ${isDarkMode ? "dark" : "light"}`}>
