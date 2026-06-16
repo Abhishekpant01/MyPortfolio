@@ -1,0 +1,123 @@
+/* components/Button.css */
+.custom-btn {
+  position: relative;
+  padding: 14px 36px;
+  border-radius: 40px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Primary Button */
+.custom-btn.primary {
+  background: #3b82f6;
+  color: white;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+}
+
+.custom-btn.primary:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Secondary Button */
+.custom-btn.secondary {
+  background: transparent;
+  border: 2px solid;
+  box-shadow: none;
+}
+
+.custom-btn.secondary:hover {
+  transform: translateY(-2px);
+}
+
+/* Light/Dark mode for secondary button */
+.hero.light .custom-btn.secondary,
+.navbar.light .custom-btn.secondary {
+  border-color: #8b5cf6;
+  color: #6d28d9;
+}
+
+.hero.dark .custom-btn.secondary,
+.navbar.dark .custom-btn.secondary {
+  border-color: #60a5fa;
+  color: #93c5fd;
+}
+
+.hero.light .custom-btn.secondary:hover,
+.navbar.light .custom-btn.secondary:hover {
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.hero.dark .custom-btn.secondary:hover,
+.navbar.dark .custom-btn.secondary:hover {
+  background: rgba(96, 165, 250, 0.1);
+}
+
+/* Text Animation */
+.custom-btn .btn-text {
+  display: inline-block;
+}
+
+.custom-btn:hover .btn-text {
+  animation: slideDownUp 0.4s ease forwards;
+}
+
+.custom-btn:not(:hover) .btn-text {
+  animation: slideUpDown 0.4s ease forwards;
+}
+
+@keyframes slideDownUp {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  40% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUpDown {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  40% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .custom-btn {
+    padding: 12px 32px;
+    font-size: 0.95rem;
+    width: 100%;
+    justify-content: center;
+  }
+}

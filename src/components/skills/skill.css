@@ -1,0 +1,154 @@
+/* skill.css - Clean, No Background, Just Logo + Name */
+
+.skill-marquee {
+  width: 100%;
+  overflow: hidden;
+  padding: 20px 0;
+  transition: all 0.3s ease;
+}
+
+/* Light Mode - Sirf text color */
+.skill-marquee.light .item {
+  color: #4c1d95;
+}
+
+.skill-marquee.light .item span {
+  color: #4c1d95;
+}
+
+/* Dark Mode - Sirf text color */
+.skill-marquee.dark .item {
+  color: #cbd5e1;
+}
+
+.skill-marquee.dark .item span {
+  color: #cbd5e1;
+}
+
+/* Track */
+.track {
+  display: flex;
+  width: max-content;
+  animation: scroll 35s linear infinite;
+  gap: 40px;
+}
+
+.track:hover {
+  animation-play-state: paused;
+}
+
+/* Item - No BG, Sirf Logo + Text */
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Logos */
+.item img {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+/* Light mode mein white logos ko dark kar do */
+.skill-marquee.light .item img[src*="framer"],
+.skill-marquee.light .item img[src*="express"],
+.skill-marquee.light .item img[src*="nextdotjs"],
+.skill-marquee.light .item img[src*="github"] {
+  filter: brightness(0.3);
+}
+
+/* Dark mode mein white logos theek */
+.skill-marquee.dark .item img[src*="framer"],
+.skill-marquee.dark .item img[src*="express"],
+.skill-marquee.dark .item img[src*="nextdotjs"] {
+  filter: brightness(1);
+}
+
+/* Text */
+.item span {
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: all 0.3s ease;
+}
+
+/* Hover Effects - Sirf thoda sa */
+.item:hover {
+  transform: translateY(-2px);
+}
+
+.item:hover img {
+  transform: scale(1.1);
+}
+
+.skill-marquee.light .item:hover span {
+  color: #7c3aed;
+}
+
+.skill-marquee.dark .item:hover span {
+  color: #60a5fa;
+}
+
+/* Animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .skill-marquee {
+    padding: 15px 0;
+  }
+  
+  .track {
+    gap: 30px;
+    animation-duration: 30s;
+  }
+  
+  .item {
+    gap: 10px;
+  }
+  
+  .item img {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .item span {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .skill-marquee {
+    padding: 12px 0;
+  }
+  
+  .track {
+    gap: 25px;
+    animation-duration: 25s;
+  }
+  
+  .item {
+    gap: 8px;
+  }
+  
+  .item img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .item span {
+    font-size: 0.8rem;
+  }
+}
