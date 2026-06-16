@@ -94,40 +94,45 @@ const Contact = () => {
     }
   };
 
-  // Animation variants
-  const containerVariants = {
+  // Animation variants - "Get In Touch" from TOP
+  const textContainerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.08,
+        staggerChildren: 0.15,
         delayChildren: 0.2,
       }
     }
   };
 
-  const wordVariants = {
+  const textWordVariants = {
     hidden: { 
-      y: 30, 
-      opacity: 0 
+      y: -80,  // Starts from TOP
+      opacity: 0,
+      rotateX: 15,
     },
     visible: {
       y: 0,
       opacity: 1,
+      rotateX: 0,
       transition: {
-        duration: 0.4,
-        ease: "easeOut"
+        type: "spring",
+        damping: 15,
+        stiffness: 120,
+        duration: 0.5,
       }
     }
   };
 
+  // For other elements - simple fade in
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.5,
+        duration: 0.4,
         ease: "easeOut"
       }
     }
@@ -142,22 +147,34 @@ const Contact = () => {
           className="contact-wrapper"
           initial="hidden"
           animate="visible"
-          variants={containerVariants}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.08,
+                delayChildren: 0.2,
+              }
+            }
+          }}
         >
-          {/* Header with Word Animation */}
-          <motion.div className="contact-header" variants={itemVariants}>
-            <motion.h1 className="contact-title" variants={containerVariants}>
-              <span className="title-line"></span>
+          {/* Header - "Get In Touch" from TOP */}
+          <div className="contact-header">
+            <motion.h1 
+              className="contact-title"
+              initial="hidden"
+              animate="visible"
+              variants={textContainerVariants}
+            >
               {titleWords.map((word, index) => (
                 <motion.span
                   key={index}
                   className="title-word"
-                  variants={wordVariants}
+                  variants={textWordVariants}
                 >
                   {word}
                 </motion.span>
               ))}
-              <span className="title-line"></span>
             </motion.h1>
             <motion.p 
               className="contact-subtitle"
@@ -165,7 +182,7 @@ const Contact = () => {
             >
               Have a project in mind or want to collaborate? Let's talk.
             </motion.p>
-          </motion.div>
+          </div>
 
           {/* Two Column Layout */}
           <div className="contact-grid">
@@ -174,6 +191,8 @@ const Contact = () => {
               className="contact-form" 
               onSubmit={handleSubmit}
               variants={itemVariants}
+              initial="hidden"
+              animate="visible"
             >
               <div className="form-group">
                 <label htmlFor="name">
@@ -252,7 +271,12 @@ const Contact = () => {
             </motion.form>
 
             {/* Right - Info */}
-            <motion.div className="contact-info" variants={itemVariants}>
+            <motion.div 
+              className="contact-info" 
+              variants={itemVariants}
+              initial="hidden"
+              animate="visible"
+            >
               <div className="info-card">
                 <h3>Let's Build Together</h3>
                 <p>
@@ -262,7 +286,6 @@ const Contact = () => {
                 
                 <div className="info-divider"></div>
 
-                {/* Email - Click to open mail */}
                 <a href="mailto:abhishek.pant@example.com" className="info-item" style={{ textDecoration: 'none' }}>
                   <span className="info-icon"><FaEmailIcon /></span>
                   <div className="info-text">
@@ -270,7 +293,6 @@ const Contact = () => {
                   </div>
                 </a>
 
-                {/* Phone - Click to call */}
                 <a href="tel:+916239547147" className="info-item call-item" style={{ textDecoration: 'none' }}>
                   <span className="info-icon"><FaPhone /></span>
                   <div className="info-text">
@@ -278,7 +300,6 @@ const Contact = () => {
                   </div>
                 </a>
 
-                {/* Location - Click to open Google Maps */}
                 <a 
                   href="https://maps.app.goo.gl/GLH2ftPHyswtWUku7" 
                   target="_blank" 
@@ -294,7 +315,6 @@ const Contact = () => {
 
                 <div className="info-divider"></div>
 
-                {/* Social Links */}
                 <div className="social-links">
                   <a href="https://github.com/abhishekpant01" className="social-link" aria-label="GitHub">
                     <FaGithub />

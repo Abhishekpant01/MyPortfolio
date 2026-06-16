@@ -1,4 +1,3 @@
-// HeroSection.jsx
 import { useState, useEffect } from "react";
 import Button from "../Button/button";
 import Scroller from "../skills/skill"; 

@@ -30,7 +30,38 @@ const About = () => {
   // Select profile image based on theme
   const profileImage = isDarkMode ? profileDark : profileLight;
 
-  // Animation variants - No side movement, just fade in
+  // Animation variants for "About Me" - FROM TOP (same as Experience & Contact)
+  const textContainerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2,
+      }
+    }
+  };
+
+  const textWordVariants = {
+    hidden: { 
+      y: -80,  // Starts from TOP
+      opacity: 0,
+      rotateX: 15,
+    },
+    visible: {
+      y: 0,
+      opacity: 1,
+      rotateX: 0,
+      transition: {
+        type: "spring",
+        damping: 15,
+        stiffness: 120,
+        duration: 0.5,
+      }
+    }
+  };
+
+  // For other elements - simple fade in
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -72,24 +103,12 @@ const About = () => {
     }
   };
 
-  const titleVariants = {
-    hidden: { 
-      y: -30, 
-      opacity: 0 
-    },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut"
-      }
-    }
-  };
-
   const handleKnowMore = () => {
     window.location.href = "/about";
   };
+
+  // Split "About Me" into words
+  const titleWords = "About Me".split(" ");
 
   return (
     <section className="about" id="about">
@@ -101,15 +120,27 @@ const About = () => {
           viewport={{ once: false, amount: 0.2, margin: "-50px 0px 0px 0px" }}
           variants={containerVariants}
         >
-          {/* Title - Upar se thoda aayega */}
-          <motion.div className="about-title-wrapper" variants={titleVariants}>
-            <h2 className="about-title">
-              <span className="title-line"></span>
-              About Me
-              <span className="title-line"></span>
-            </h2>
+          {/* Title - "About Me" with stagger animation from TOP */}
+          <div className="about-title-wrapper">
+            <motion.h2 
+              className="about-title"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: false, amount: 0.3 }}
+              variants={textContainerVariants}
+            >
+              {titleWords.map((word, index) => (
+                <motion.span
+                  key={index}
+                  className="title-word"
+                  variants={textWordVariants}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </motion.h2>
             <p className="about-subtitle">Get to know me better</p>
-          </motion.div>
+          </div>
 
           {/* Content Grid - Photo left, Content right */}
           <div className="about-grid">

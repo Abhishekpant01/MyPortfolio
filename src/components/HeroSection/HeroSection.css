@@ -1,3 +1,5 @@
+/* HeroSection.css - Updated with proper alignment */
+
 .hero {
   min-height: 70vh;
   display: flex;
@@ -6,6 +8,9 @@
   position: relative;
   padding: 0;
   margin: 0;
+  font-smooth: antialiased;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* LIGHT MODE */
@@ -52,11 +57,14 @@
 
 .hero-content {
   max-width: 550px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 /* Name */
 .hero-name-wrapper {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .hero-name {
@@ -75,25 +83,17 @@
   color: #f1f5f9;
 }
 
-.hero-name span {
-  display: inline-block;
-}
-
-.hero-name span.space-char {
-  width: 0.5rem;
-}
-
-/* Role */
+/* Role - Made Bold */
 .hero-role {
   display: flex;
   gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   flex-wrap: wrap;
 }
 
 .role-line {
   font-size: 1.6rem;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 2px;
 }
 
@@ -110,11 +110,12 @@
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  font-weight: 900;
 }
 
 /* Dynamic Text */
 .hero-dynamic-text {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   min-height: 60px;
 }
 
@@ -154,7 +155,7 @@
   height: 46px;
   display: flex;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
 }
 
@@ -163,11 +164,11 @@
   min-width: 150px;
 }
 
-/* Social Links */
+/* Social Links - Fixed Alignment */
 .hero-social {
   display: flex;
-  gap: 1rem;
   align-items: center;
+  margin-top: 0.25rem;
 }
 
 .social-links {
@@ -177,8 +178,8 @@
 }
 
 .social-link {
-  width: 60px;
-  height: 60px;
+  width: 55px;
+  height: 55px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -190,8 +191,8 @@
 }
 
 .social-link svg {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
 }
 
 .hero.light .social-link {
@@ -206,6 +207,7 @@
 
 .social-link:hover {
   transform: translateY(-4px);
+  border-color: #7c3aed;
 }
 
 /* Right Side Animation */
@@ -444,10 +446,6 @@
     line-height: 1.2;
   }
   
-  .hero-name span.space-char {
-    width: 0.3rem;
-  }
-  
   .hero-role {
     justify-content: center;
     gap: 0.5rem;
@@ -491,18 +489,17 @@
   
   .hero-social {
     justify-content: center;
-    gap: 0.7rem;
-    margin-bottom: 0.5rem;
+    margin-top: 0;
   }
   
   .social-link {
-    width: 45px;
-    height: 45px;
+    width: 48px;
+    height: 48px;
   }
   
   .social-link svg {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
   }
   
   .hero-right {
@@ -556,8 +553,8 @@
   }
   
   .social-link {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
   }
   
   .social-link svg {
@@ -581,4 +578,21 @@
   .cube-back { transform: translateZ(-50px) rotateY(180deg); }
   .cube-left { transform: translateX(-50px) rotateY(-90deg); }
   .cube-right { transform: translateX(50px) rotateY(90deg); }
+}
+
+/* Additional Fixes */
+.hero-name {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.role-line {
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.social-links {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }

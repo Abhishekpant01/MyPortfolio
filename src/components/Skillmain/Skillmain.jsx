@@ -17,7 +17,38 @@ const Skills = () => {
     { name: "Expressjs", logo: "https://cdn.simpleicons.org/express/ffffff" },
    ];
 
-  // Animation variants
+  // Animation variants for "My Skills" - FROM TOP (same as others)
+  const textContainerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2,
+      }
+    }
+  };
+
+  const textWordVariants = {
+    hidden: { 
+      y: -80,  // Starts from TOP
+      opacity: 0,
+      rotateX: 15,
+    },
+    visible: {
+      y: 0,
+      opacity: 1,
+      rotateX: 0,
+      transition: {
+        type: "spring",
+        damping: 15,
+        stiffness: 120,
+        duration: 0.5,
+      }
+    }
+  };
+
+  // For other elements - simple fade in
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -46,20 +77,8 @@ const Skills = () => {
     }
   };
 
-  const titleVariants = {
-    hidden: { 
-      y: -30, 
-      opacity: 0 
-    },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut"
-      }
-    }
-  };
+  // Split "My Skills" into words
+  const titleWords = "My Skills".split(" ");
 
   return (
     <section className="skills" id="skills">
@@ -71,15 +90,27 @@ const Skills = () => {
           viewport={{ once: false, amount: 0.1 }}
           variants={containerVariants}
         >
-          {/* Title */}
-          <motion.div className="skills-header" variants={titleVariants}>
-            <h2 className="skills-title">
-              <span className="title-line"></span>
-              My Skills
-              <span className="title-line"></span>
-            </h2>
+          {/* Title - "My Skills" with stagger animation from TOP */}
+          <div className="skills-header">
+            <motion.h2 
+              className="skills-title"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: false, amount: 0.3 }}
+              variants={textContainerVariants}
+            >
+              {titleWords.map((word, index) => (
+                <motion.span
+                  key={index}
+                  className="title-word"
+                  variants={textWordVariants}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </motion.h2>
             <p className="skills-subtitle">Technologies I work with</p>
-          </motion.div>
+          </div>
 
           {/* Skills Grid */}
           <motion.div className="skills-grid" variants={containerVariants}>

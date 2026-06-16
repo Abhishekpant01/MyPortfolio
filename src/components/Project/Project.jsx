@@ -52,6 +52,38 @@ const Projects = () => {
     }
   ];
 
+  // Animation variants for "Featured Projects" - FROM TOP (same as others)
+  const textContainerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2,
+      }
+    }
+  };
+
+  const textWordVariants = {
+    hidden: { 
+      y: -80,  // Starts from TOP
+      opacity: 0,
+      rotateX: 15,
+    },
+    visible: {
+      y: 0,
+      opacity: 1,
+      rotateX: 0,
+      transition: {
+        type: "spring",
+        damping: 15,
+        stiffness: 120,
+        duration: 0.5,
+      }
+    }
+  };
+
+  // For other elements - simple fade in
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -59,23 +91,6 @@ const Projects = () => {
       transition: {
         staggerChildren: 0.2,
         delayChildren: 0.3,
-      }
-    }
-  };
-
-  const titleVariants = {
-    hidden: { 
-      y: -50, 
-      opacity: 0 
-    },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        damping: 12,
-        stiffness: 100,
-        duration: 0.5
       }
     }
   };
@@ -115,6 +130,9 @@ const Projects = () => {
     }
   };
 
+  // Split "Featured Projects" into words
+  const titleWords = "Featured Projects".split(" ");
+
   return (
     <section className="projects" id="projects">
       <div className="projects-container">
@@ -125,14 +143,27 @@ const Projects = () => {
           viewport={{ once: false, amount: 0.2, margin: "-50px 0px 0px 0px" }}
           variants={containerVariants}
         >
-          <motion.div className="projects-title-wrapper" variants={titleVariants}>
-            <h2 className="projects-title">
-              <span className="title-line"></span>
-              Featured Projects
-              <span className="title-line"></span>
-            </h2>
+          {/* Title - "Featured Projects" with stagger animation from TOP */}
+          <div className="projects-title-wrapper">
+            <motion.h2 
+              className="projects-title"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: false, amount: 0.3 }}
+              variants={textContainerVariants}
+            >
+              {titleWords.map((word, index) => (
+                <motion.span
+                  key={index}
+                  className="title-word"
+                  variants={textWordVariants}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </motion.h2>
             <p className="projects-subtitle">Some of my recent work</p>
-          </motion.div>
+          </div>
 
           <div className="projects-grid">
             {projects.map((project, index) => (
