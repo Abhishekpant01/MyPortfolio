@@ -6,10 +6,8 @@ import Scroller from "../skills/skill";
 import "./HeroSection.css";
 
 const HeroSection = () => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const savedTheme = localStorage.getItem("theme");
-    return savedTheme === "dark";
-  });
+  const [isDarkMode, setIsDarkMode] = useState(false); // Start with false
+  const [isMounted, setIsMounted] = useState(false); // Add mounted state
   
   const [displayName, setDisplayName] = useState("");
   const [nameIndex, setNameIndex] = useState(0);
@@ -24,7 +22,23 @@ const HeroSection = () => {
   const changingWords = ["fast", "responsive", "scalable", "user-focused"];
   const [wordIndex, setWordIndex] = useState(0);
   
+  // Fix: Check theme only after component mounts
   useEffect(() => {
+    setIsMounted(true);
+    
+    // Check initial theme
+    const savedTheme = localStorage.getItem("theme");
+    const isDark = savedTheme === "dark" || document.body.classList.contains("dark-mode");
+    setIsDarkMode(isDark);
+    
+    // If dark mode, ensure body class is set
+    if (isDark) {
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+    }
+    
+    // Listen for theme changes
     const checkTheme = () => {
       const savedTheme = localStorage.getItem("theme");
       setIsDarkMode(savedTheme === "dark");
@@ -47,6 +61,8 @@ const HeroSection = () => {
   
   // Name animation
   useEffect(() => {
+    if (!isMounted) return; // Wait for mount
+    
     if (nameIndex < fullName.length) {
       const timer = setTimeout(() => {
         setDisplayName(fullName.slice(0, nameIndex + 1));
@@ -56,11 +72,11 @@ const HeroSection = () => {
     } else if (!showRole) {
       setTimeout(() => setShowRole(true), 300);
     }
-  }, [nameIndex, showRole, fullName.length]);
+  }, [nameIndex, showRole, fullName.length, isMounted]);
   
   // Typewriter effect
   useEffect(() => {
-    if (!showRole) return;
+    if (!showRole || !isMounted) return;
     
     let timer;
     
@@ -107,22 +123,26 @@ const HeroSection = () => {
     }
     
     return () => clearTimeout(timer);
-  }, [showRole, stage, textIndex, isDeleting, wordIndex, mainLine, changingWords]);
+  }, [showRole, stage, textIndex, isDeleting, wordIndex, mainLine, changingWords, isMounted]);
 
   const handleViewProjects = () => {
     document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleDownloadCV = () => {
-  // Create a link to the CV file in the public folder
-  const cvUrl = '/resume.pdf'; // Public folder ke root mein file hai
-  const link = document.createElement('a');
-  link.href = cvUrl;
-  link.download = 'Abhishek-pant Resume.pdf'; // Download karne par file ka naam
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
+    const cvUrl = '/resume.pdf';
+    const link = document.createElement('a');
+    link.href = cvUrl;
+    link.download = 'Abhishek-pant Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Don't render until mounted to avoid flash
+  if (!isMounted) {
+    return <div className="hero-loading" style={{ minHeight: '70vh' }}></div>;
+  }
 
   return (
     <>
@@ -207,53 +227,53 @@ const HeroSection = () => {
                   transition={{ delay: 1.2, duration: 0.5 }}
                 >
                  <div className="social-links">
-  {/* GitHub */}
-  <a
-    href="https://github.com/Abhishekpant01"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="social-link"
-    aria-label="GitHub"
-  >
-    <svg viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2.17c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.18.08 1.8 1.2 1.8 1.2 1.04 1.8 2.75 1.28 3.42.98.1-.76.41-1.28.74-1.57-2.55-.29-5.23-1.28-5.23-5.67 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.17a11.1 11.1 0 0 1 5.8 0c2.2-1.48 3.17-1.17 3.17-1.17.63 1.58.24 2.75.12 3.04.74.8 1.18 1.82 1.18 3.07 0 4.4-2.68 5.38-5.24 5.67.42.36.79 1.06.79 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/>
-    </svg>
-  </a>
+                  {/* GitHub */}
+                  <a
+                    href="https://github.com/Abhishekpant01"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="social-link"
+                    aria-label="GitHub"
+                  >
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2.17c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.18.08 1.8 1.2 1.8 1.2 1.04 1.8 2.75 1.28 3.42.98.1-.76.41-1.28.74-1.57-2.55-.29-5.23-1.28-5.23-5.67 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.17a11.1 11.1 0 0 1 5.8 0c2.2-1.48 3.17-1.17 3.17-1.17.63 1.58.24 2.75.12 3.04.74.8 1.18 1.82 1.18 3.07 0 4.4-2.68 5.38-5.24 5.67.42.36.79 1.06.79 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/>
+                    </svg>
+                  </a>
 
-  {/* LinkedIn */}
-  <a
-    href="https://linkedin.com/in/abhishek-pant-357975413"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="social-link"
-    aria-label="LinkedIn"
-  >
-    <svg viewBox="0 0 24 24" fill="currentColor">
-      <path d="M4.98 3.5C4.98 4.88 3.87 6 2.49 6S0 4.88 0 3.5 1.11 1 2.49 1s2.49 1.12 2.49 2.5zM0 8h5v16H0V8zm8 0h4.79v2.19h.07c.67-1.27 2.3-2.61 4.74-2.61C22.42 7.58 24 10.08 24 14.1V24h-5v-8.47c0-2.02-.04-4.62-2.82-4.62-2.82 0-3.25 2.2-3.25 4.47V24H8V8z"/>
-    </svg>
-  </a>
+                  {/* LinkedIn */}
+                  <a
+                    href="https://linkedin.com/in/abhishek-pant-357975413"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="social-link"
+                    aria-label="LinkedIn"
+                  >
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M4.98 3.5C4.98 4.88 3.87 6 2.49 6S0 4.88 0 3.5 1.11 1 2.49 1s2.49 1.12 2.49 2.5zM0 8h5v16H0V8zm8 0h4.79v2.19h.07c.67-1.27 2.3-2.61 4.74-2.61C22.42 7.58 24 10.08 24 14.1V24h-5v-8.47c0-2.02-.04-4.62-2.82-4.62-2.82 0-3.25 2.2-3.25 4.47V24H8V8z"/>
+                    </svg>
+                  </a>
 
-  {/* Email */}
-  <a
-    href="mailto:abhishekpant212@gmail.com"
-    className="social-link"
-    aria-label="Email"
-  >
-    <svg viewBox="0 0 24 24" fill="none">
-      <path
-        d="M3 6.75A1.75 1.75 0 0 1 4.75 5h14.5A1.75 1.75 0 0 1 21 6.75v10.5A1.75 1.75 0 0 1 19.25 19H4.75A1.75 1.75 0 0 1 3 17.25V6.75Z"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      <path
-        d="M3.5 7.5L12 13.5L20.5 7.5"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-    </svg>
-  </a>
-</div>
+                  {/* Email */}
+                  <a
+                    href="mailto:abhishekpant212@gmail.com"
+                    className="social-link"
+                    aria-label="Email"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M3 6.75A1.75 1.75 0 0 1 4.75 5h14.5A1.75 1.75 0 0 1 21 6.75v10.5A1.75 1.75 0 0 1 19.25 19H4.75A1.75 1.75 0 0 1 3 17.25V6.75Z"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                      <path
+                        d="M3.5 7.5L12 13.5L20.5 7.5"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </a>
+                </div>
                 </motion.div>
               )}
             </div>
@@ -290,7 +310,7 @@ const HeroSection = () => {
         <div className="hero-glow"></div>
       </section>
 
-      {/* Scroller Component - Yahan pe add kiya */}
+      {/* Scroller Component */}
       <Scroller />
     </>
   );
