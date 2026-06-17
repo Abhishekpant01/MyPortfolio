@@ -35,7 +35,7 @@ const Projects = () => {
       image: portfolioImage,
       techStack: ["React.js", "Framer Motion", "CSS3", "React Icons"],
       liveLink: "#home",
-      githubLink: "https://github.com/Abhishekpant01",
+      githubLink: "https://github.com/Abhishekpant01/MyPortfolio",
       year: "2026",
       featured: true
     },
